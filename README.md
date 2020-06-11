@@ -11,31 +11,18 @@
 * [Contato](#contato)
 
 ## Sobre o Projeto
-O projeto da aplicação AD.Data.Import se deu na necessidade de clientes integrarem aplicações e dados do setor Recursos Humanos para o Active Directory Domain Services (AD DS).
+Este projeto, visa manter uma repositório de scripts voltado para o Exchange Server. Os scripts, desenvolvidos em PowerShell, visam facilitar o gerenciamento e a administração de uma organização no Exchange Server On-Premises.
 
 ### Desenvolvimento
-Por se tratar de uma quantidade razoável de dados que serão lidos a partir de um arquivo .CSV e repetidos inúmeras vezes ao longo do dia. A aplicação precisaria atender no mínimo a confiabilidade e rapidez no processamento dos dados.
-Nessas condições básicas, para o desenvolvimento da aplicação foi escolhido a linguagem C#, .Net Framework 4.6.1 e os pacotes: CsvHelper, Mailkit e Serilog.
-
-* [C#](https://docs.microsoft.com/pt-br/dotnet/csharp/) - Linguagem de programação desenvolvida pela Microsoft como parte da plataforma .Net.
-* [.Net Framework](https://docs.microsoft.com/pt-br/dotnet/) - É o framework para de desenvolvimento e execução de sistemas e aplicações.
-* [CsvHelper](https://joshclose.github.io/CsvHelper/) - Uma biblioteca .Net para ler e escrever arquivos .CSV.
-* [Mailkit](https://github.com/jstedfast/MailKit) - Uma biblioteca .Net para IMAP, POP3 e SMTP.
-* [Serilog](https://serilog.net/) - Várias bibliotecas .Net para a criação e registro de logs para diagnóstico.
+O desenvolvimento dos scripts são em Powershell e visam atender demandas para o Exchange Online, Exchange Server 2010 e versões superiores.
 
 ## Início
-Das regras de negócio em si, a aplicação AD.Data.Import deverá atender um conjunto de condições específicas para o seu desenvolviento. Segue abaixo:
-
-* Ler um arquivo de dados no formato .CSV com nome estático e possuir os seguintes cabeçalhos: 
-```sh
-COMPANY; SAMACCOUNTNAME; ENABLED; EMPLOYEEID; GIVENNAME; SN; DISPLAYNAME; DEPARTMENT; TITLE; TELEPHONENUMBER
+Os scripts encontram-se na pasta Scripts, subpastas ou arquivos diretamente publicados. Ainda assim, cada script possui um nome intuitivo e dentro do seu arquivo encontra-se uma sessão explicativa que pode ser lida diretamente ou no Powershell poderá ser obtida através do comando:
 ```
-* O arquivo de dados no formato .CSV deverá estar delimitado pelo caracter ";";
-* Registrar as alterações e erros no log de Eventos do Windows Server nominado **AD Data Import**;
-* Quando forem registrados erros durante a execução do AD.Data.Import, os erros deverão ser registrados no log de Eventos do Windows nominado **AD Data Import** e enviado via e-mail para o endereço **chamados@dohler.com.br**;
-
+Get-Help -Name .\Connect-Exchange.ps1
+```
 ### Pré-Requisitos
-Para a execução da aplicação AD.Data.Import, são necessários os pré-requisitos abaixo:
+Para a execução dos scripts em Powershell, são necessários os pré-requisitos abaixo:
 
 * Servidor com Windows Server 2012 R2 ou superior;
 * .Net Framework 4.6.1 ou superior;
