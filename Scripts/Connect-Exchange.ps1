@@ -7,10 +7,10 @@ O script em questão conecta nos servidores Exchange Server utilizando o Powersh
 
 .EXAMPLE
 
-.\Connect-ExchangeServer.ps1
+.\Connect-Exchange.ps1
 
 .NOTES
-Script: Connect-ExchangeServer.ps1
+Script: Connect-Exchange.ps1
 Autor.: Celso Ricardo Gubitoso
 E-mail: celso.gubitoso@solidqi.com.br
 Date..: 15/12/2019
