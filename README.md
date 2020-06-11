@@ -146,4 +146,4 @@ Information, Event ID 1, Source: ADDataImport: A aplicação AD.Data.Import.exe 
 Não definido.
 
 ## Contato
-Celso Ricardo Gubitoso - celso@gubitoso.com - M: +55 47 99210 4400.
+Celso Ricardo Gubitoso - celso@gubitoso.com - M: +55 47 99210 4400
