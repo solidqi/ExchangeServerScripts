@@ -21,6 +21,9 @@ https://docs.microsoft.com/pt-br/powershell/exchange/exchange-server/connect-to-
 
 Read-Host
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/read-host?view=powershell-6
+
+Get-Help
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-help?view=powershell-7
 #>
 
 #Carrega o usuário com permissões administrativas para o Exchange Server
