@@ -10,19 +10,24 @@ O script em questão conecta nos servidores Exchange Server utilizando o Powersh
 .\Connect-Exchange.ps1
 
 .NOTES
-Script: Connect-Exchange.ps1
+Script: Connect-Exchange.ps1 v1.0
 Autor.: Celso Ricardo Gubitoso
 E-mail: celso.gubitoso@solidqi.com.br
 Date..: 15/12/2019
 
 .LINK
 Conectar-se a servidores do Exchange usando o PowerShell remoto
+---------------------------------------------------------------
 https://docs.microsoft.com/pt-br/powershell/exchange/exchange-server/connect-to-exchange-servers-using-remote-powershell?view=exchange-ps
 
+
 Read-Host
+---------
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/read-host?view=powershell-6
 
+
 Get-Help
+--------
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-help?view=powershell-7
 #>
 
@@ -30,12 +35,12 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get
 $UserCredential = Get-Credential
 
 #Lê e armazena o FQDN do servidor Exchange Server
-$ExchangeServer = Read-Host "Informe o FQDN do Servidor Exchange Server: "
+$ExchangeServer = Read-Host "Informe o FQDN do Servidor Exchange Server"
 #Cria uma nova sessão Powershell para acessar o Exchange Server
-$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://$ExchangeServer/PowerShell/ -Authentication Kerberos -Credential $UserCredential
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://$ExchangeServer/PowerShell/ -Authentication Basic -Credential $UserCredential
 
 #Importa a sessão Powershell da variável $Session
 Import-PSSession $Session -DisableNameChecking
 
-#Sai da sessão Powershell previamente importada
-Exit-PSSession -$Session
+#Remove a sessão Powershell previamente importada
+#Get-PSSession | Remove-PSSession

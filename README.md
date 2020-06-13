@@ -25,7 +25,8 @@ Get-Help -Name .\Connect-Exchange.ps1
 ### Pré-Requisitos
 Para a execução dos scripts em Powershell, são necessários os pré-requisitos abaixo:
 
-* Powershell versão 5.2 ou superior;
+* [Windows Management Framework 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616);
+* Powershell versão 5.1 ou superior;
 * Exchange Management Tools;
 
 ### Instalação
@@ -39,6 +40,7 @@ O uso dos scripts, dependerá do script a ser executado e sua finalidade com que
 
 ## Scripts
 * **Connect-Exchange.ps1** ..: Script de conexão para o Exchange Server (On-Premises).
+* **Connect-ExOnline.ps1** ..: Script de conexão para o Exchange Online.
 
 ## Licença
 Não definido.
