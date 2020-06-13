@@ -5,7 +5,7 @@ Adiciona o sufixo "@<organization>.onmicrosoft.com" no atributo EmailAddresses d
 
 .DESCRIPTION
 Este script tem a finalidade de listar todos os Mailbox (On-Premises) que não possuem o SMTP Addresses do Exchange Online ("@<Organization>.onmicrosoft.com").
-Uma vez que os mailbox forem listados, será identificado o SMTP Address padrão (por exemplo: SMTP:administrator@solidqi.com.br") e adicionado o novo SMTP Address
+Uma vez que os mailbox forem listados, será identificado o SMTP Address padrão (por exemplo: SMTP:admin.celso@solidqi.com.br") e adicionado o novo SMTP Address
 para o Exchange Online.
 
 .EXAMPLE
@@ -59,3 +59,35 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 
 #Importa a sessão Powershell da variável $Session
 Import-PSSession $Session -DisableNameChecking
+
+#Lista todos os mailbox que não contêm o sufixo "@onmicrosoft.com"
+$Mailboxes = Get-Mailbox | where {($_.Emailaddresses -notmatch "@solidqi.onmicrosoft.com") -and ($_.RecipientTypeDetails -eq "UserMailbox")} | Select  Alias,Emailaddresses
+
+#Processa cada mailbox individualmente
+foreach ($Mailbox in $Mailboxes){
+
+	#Divide o valor do atributo "EmailAddresses" do mailbox corrente separado por vírgula
+	$SMTPAddresses = $Mailbox.EmailAddresses  -Split ", "
+
+	#Processa cada SMTP Addresses do atributo "EmailAddresses"
+	foreach ($SMTPAddress in $SMTPAddresses){
+
+		#Verifica qual endereço possui o "SMTP" padrão
+		if ($SMTPAddress -cmatch '[A-Z]'){
+		
+			#Extrai o endereço de mail antes da "@". Por exemplo: se o endereço for "admin.celso@solidqi.com.br". O resultado será "admin.celso".
+			$SMTPOnMicrosoft = $SMTPAddress.Substring(5).Split("@")[0]
+
+			try{
+
+				#Imprime no monitor a saída do comando em Powershell
+				Write-Host Set-Mailbox $Mailboxes.Alias -EmailAddresses "@{Add=$SMTPOnMicrosoft@solidqi.onmicrosoft.com}"
+			}
+			catch {
+
+				$ErrorMessage = $_.Exception.Message
+				Write-Warning $ErrorMessage
+			}
+		}
+	}
+}

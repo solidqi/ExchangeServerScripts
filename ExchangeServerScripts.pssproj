@@ -29,7 +29,9 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scripts\Add-Ex.SMTPAddress.ps1" />
     <Compile Include="Scripts\Connect-Exchange.ps1" />
+    <Compile Include="Scripts\Connect-ExOnline.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
