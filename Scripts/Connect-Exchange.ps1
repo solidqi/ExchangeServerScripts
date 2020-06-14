@@ -44,6 +44,7 @@ Import-PSSession $Session -DisableNameChecking
 
 #Remove a sessão Powershell previamente importada
 #Get-PSSession | Remove-PSSession
+
 # SIG # Begin signature block
 # MIIgKwYJKoZIhvcNAQcCoIIgHDCCIBgCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
