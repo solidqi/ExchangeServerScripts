@@ -39,8 +39,10 @@ Não são necessárias configurações adicionais, visto que cada script é assi
 O uso dos scripts, dependerá do script a ser executado e sua finalidade com que ele foi desenvolvido.
 
 ## Scripts
-* **Connect-Exchange.ps1** ..: Script de conexão para o Exchange Server (On-Premises).
-* **Connect-ExOnline.ps1** ..: Script de conexão para o Exchange Online.
+* **Connect-Exchange.ps1** ....: Script de conexão para o Exchange Server (On-Premises).
+* **Connect-ExOnline.ps1** ....: Script de conexão para o Exchange Online.
+* **Add-Ex.SMTPAddress.ps1** ..: Script para inclusão do SMTP Address "@<organizacao>.onmicrosoft.com"
+* **Remove-Ex.SMTPAddress.ps1 .: Script para remoção do SMTP Address com sufixo "solidqi.net.br"
 
 ## Licença
 Não definido.

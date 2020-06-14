@@ -1,34 +1,35 @@
 <#
 .SYNOPSIS
-Conecta remotamente via Powershell no Exchange Online.
+Remove o sufixo "@solidqi.net.br" no atributo EmailAddresses de cada Mailbox.
+
 
 .DESCRIPTION
-O script em questão conecta no Exchange Online utilizando o Powershell remoto. É preciso que o usuário utilizado seja Global Administrator ou Exchange Admin.
+Este script tem a finalidade de listar todos os Mailbox (On-Premises) que possuem o SMTP Addresses "@solidqi.com.br".Uma vez que os mailbox forem
+listados, será identificado o SMTP Address por exemplo: smtp:admin.celso@solidqi.com.br") e removido SMTP Address em questão.
 
 .EXAMPLE
 
-.\Connect-ExOnline.ps1
 
 .NOTES
-Script: Connect-ExOnline.ps1 v1.0
+Script: Remove-Ex.SMTPAddresses.ps1
 Autor.: Celso Ricardo Gubitoso
 E-mail: celso.gubitoso@solidqi.com.br
-Date..: 11/06/2020
+Date..: 13/06/2020
 
 .LINK
-Connect to Exchange Online PowerShell
--------------------------------------
-https://docs.microsoft.com/en-us/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps
+Get-Mailbox
+-----------
+https://docs.microsoft.com/pt-br/powershell/module/exchange/mailboxes/get-mailbox?view=exchange-ps
 
 
-Conectar-se a servidores do Exchange usando o PowerShell remoto
----------------------------------------------------------------
-https://docs.microsoft.com/pt-br/powershell/exchange/exchange-server/connect-to-exchange-servers-using-remote-powershell?view=exchange-ps
+Split
+-----
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_split?view=powershell-7
 
 
-Read-Host
----------
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/read-host?view=powershell-6
+Set-Mailbox
+-----------
+https://docs.microsoft.com/pt-br/powershell/module/exchange/mailboxes/set-mailbox?view=exchange-ps
 
 
 Get-Help
@@ -36,22 +37,51 @@ Get-Help
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-help?view=powershell-7
 #>
 
+#Exibe no ecrã as informações abaixo
+Write-Host Remove-Ex.SMTPAddress.ps1 v1.0 - Remove SMTP Address
+Write-Host SolidQI - Negócios e Soluções em TI
+Write-Host `n
+
 #Carrega o usuário com permissões administrativas para o Exchange Online
 $UserCredential = Get-Credential
 
 #Cria uma nova sessão Powershell para acessar o Exchange Online
-$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://$ExchangeServer/PowerShell/ -Authentication Basic -Credential $UserCredential
 
 #Importa a sessão Powershell da variável $Session
 Import-PSSession $Session -DisableNameChecking
 
-#Remove a sessão Powershell previamente importada
-#Get-PSSession | Remove-PSSession $Session
+foreach ($Mailbox in $Mailboxes){
+
+	#Divide o valor do atributo "EmailAddresses" do mailbox corrente separado por vírgula
+	$SMTPAddresses = $Mailbox.EmailAddresses  -Split ", "
+
+	#Processa cada SMTP Addresses do atributo "EmailAddresses"
+	foreach ($SMTPAddress in $SMTPAddresses){
+
+		#Verifica qual endereço possui o "SMTP" padrão
+		if ($SMTPAddress -like "*@solidqi.net.br"){
+		
+			try{
+
+				#Imprime no monitor a saída do comando em Powershell
+				#Write-Host "Set-Mailbox " $Mailboxes.Alias " -EmailAddresses @{Remove="$SMTPAddress.EmailAddresses"}"
+				#Remove o sufixo do SMTP Address "@solidqi.net.br"
+				Set-Mailbox $Mailbox.Alias -EmailAddresses @{Remove=$SMTPAddress.EmailAddresses}
+			}
+			catch {
+
+				$ErrorMessage = $_.Exception.Message
+				Write-Warning $ErrorMessage
+			}
+		}
+	}
+}
 # SIG # Begin signature block
 # MIIgKwYJKoZIhvcNAQcCoIIgHDCCIBgCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUOB8U5131JPHrhFL4vb3Zl26r
-# 9s+gghuSMIIDtzCCAp+gAwIBAgIQDOfg5RfYRv6P5WD8G/AwOTANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU8hTZNI5Poh64eGMDTQXwyiSI
+# lFCgghuSMIIDtzCCAp+gAwIBAgIQDOfg5RfYRv6P5WD8G/AwOTANBgkqhkiG9w0B
 # AQUFADBlMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYD
 # VQQLExB3d3cuZGlnaWNlcnQuY29tMSQwIgYDVQQDExtEaWdpQ2VydCBBc3N1cmVk
 # IElEIFJvb3QgQ0EwHhcNMDYxMTEwMDAwMDAwWhcNMzExMTEwMDAwMDAwWjBlMQsw
@@ -202,22 +232,22 @@ Import-PSSession $Session -DisableNameChecking
 # RGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMTEwLwYDVQQD
 # EyhEaWdpQ2VydCBTSEEyIEFzc3VyZWQgSUQgQ29kZSBTaWduaW5nIENBAhAKaiXW
 # TZnc3MNGMX6P5Yl2MAkGBSsOAwIaBQCgQDAZBgkqhkiG9w0BCQMxDAYKKwYBBAGC
-# NwIBBDAjBgkqhkiG9w0BCQQxFgQUe7UkJGiqWUfRQCp5Ux5Mq43pcsYwDQYJKoZI
-# hvcNAQEBBQAEggEAm3QI9+43WEc8ZEuMtO0XrgNkVNnntJcsyBKd5orsfsMjJGXc
-# C6d99ZMWDJhDHO/cwFR0+XTNecQt0S+VLZrFFK+gy3sB2PJtcA9WrKCMfV1CzOjI
-# ydpJG6wpJD8etTw7aZdkvCtWtCkShIDXKckeqADbsoxVNEI9sGjfan9yU1+PdxbG
-# FKEiOKjjb4LXNqd4yNQHtZ67j1+BYQmYWvhQ84oCvm0+gxmiGoIgEdVRyA03KBE+
-# peOe693W62AQ7RZ2qATHicsXaloPUYNRNEiCLLMoM3wf5VO4cWJqHsYxNqA2h5hM
-# PA/jhl7H7Vkr0m95lwcHzhXISfjG4mHDWFTKEqGCAg8wggILBgkqhkiG9w0BCQYx
+# NwIBBDAjBgkqhkiG9w0BCQQxFgQUx9ai5sFfMyUG6V8YedJOgtkJoSAwDQYJKoZI
+# hvcNAQEBBQAEggEAdxj1zjg3RH95kAN8xw7++e1CenwHSWUeJ0TCB6AtyTX4AbB+
+# hQQSlZ8TpigaPN6t4mwufYGscg8Z7nG46kq4YtUPd1w4zEPClMFnfXxpibk15tHr
+# xiWQmzW5SBCTehhdaDPe9G9y3gsiFrhVi9FQYSIj2zgsgds7wOmdd5Je/6YrcL8K
+# JhlCJfANEOYDVWRfyLy2rRp7+DdGioyRY2+E2iXsl00vD06YpPHcRQioVK9jzj9e
+# AVPxURzLf5uNR8rjISGvP7U7eZ2TQlYyEU1e8V7zmrco7qn3gYAdyYSe06Wegjxy
+# 277+kXh8tKvjSskkHZOcOGeIskfAHs30DcG0I6GCAg8wggILBgkqhkiG9w0BCQYx
 # ggH8MIIB+AIBATB2MGIxCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJ
 # bmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xITAfBgNVBAMTGERpZ2lDZXJ0
 # IEFzc3VyZWQgSUQgQ0EtMQIQAwGaAjr/WLFr1tXq5hfwZjAJBgUrDgMCGgUAoF0w
 # GAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAwNjE0
-# MDEyNDE2WjAjBgkqhkiG9w0BCQQxFgQU70JLujdaeIZk9fWkoKSRE/VpPBkwDQYJ
-# KoZIhvcNAQEBBQAEggEAjNnB1ju/CPy4IK9IZXgieYlnJnownZ2tflEQINgsiOnt
-# SIEkowlxGJ+LkG4BDo83ijfBuL8CCqWyGehd4jRG8at4w33ngs/W8D7X53z/KpUu
-# T4dj3LL48G2NCKlE7udk60NKfMcZs1korkkXbJXEmswIhsluTxrabuDamNoRU+QS
-# zEMPpBUBZ8jhx22s8KM/J6Ac3bAx2rb/OYQAfHcxcLNnfnxSWDpvTWdpm19gCFJL
-# zaRLbmf7LbxiVU60r02Ya+rd4OTT4gKdtnbsjpwbAJV9OqczqKw97AP0qIA6ppct
-# GQ6eLZtCL7aUgqg795GpYveVZhF15YlFA/I8k3DSGA==
+# MDEyNDE2WjAjBgkqhkiG9w0BCQQxFgQUi844B5QzsFAIpzfdnfuY2hicd/gwDQYJ
+# KoZIhvcNAQEBBQAEggEAA1HPFrV1JYSj7yH19TlhMlBcNpR8hWn3f+iF60W9X0W8
+# nCjVwvSfW9uoewetQL7rxXMG/xnPMJaEC6zzo+RQtpb7RIUPxIJbuUD3UpruwDD7
+# sETH4gsd4UPNJjssQqt3PNQLteeX4tTbfuOl02NMhIUzTuVgppdB2vfL/hbKtzYe
+# YjjGR7VMEH6yFa4p51i2DLZbsdQ/DoIG70Vtz9tJgsW2ZAfPl5TpoBEje6N+dQxJ
+# Sxwf6QOGNqIM3SswwRP6A0kygI8qSWb6rJcd9ZK0FGMI+ciOubB+vLqnF6w4Pat+
+# tYW7BjGUpbx6FKbG2Jr9Qi7TrN+FLICNlf7CensTkA==
 # SIG # End signature block

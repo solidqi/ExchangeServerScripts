@@ -32,6 +32,12 @@
     <Compile Include="Scripts\Add-Ex.SMTPAddress.ps1" />
     <Compile Include="Scripts\Connect-Exchange.ps1" />
     <Compile Include="Scripts\Connect-ExOnline.ps1" />
+    <Compile Include="Scripts\Remove-Ex.SMTPAddress.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitattributes" />
+    <Content Include=".gitignore" />
+    <Content Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
